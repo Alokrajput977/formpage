@@ -3,23 +3,23 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-/* CSS Variables for light mode */
-:root {
+  }
+  
+  /* CSS Variables for light mode */
+  :root {
     --background-color: #f0f0f0;
     --header-background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
-    --card-background: linear-gradient(90deg, rgb(206, 64, 21) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    --card-background: linear-gradient(90deg, rgb(206,64,21) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
     --text-color: #333;
     --card-text-color: #fff;
     --button-border: #000;
     --button-text: #000;
     --button-hover-background: #000;
     --button-hover-text: #fff;
-}
-
-/* CSS Variables for dark mode */
-body.dark {
+  }
+  
+  /* CSS Variables for dark mode */
+  body.dark {
     --background-color: #121212;
     --header-background: linear-gradient(90deg, #333, #555);
     --card-background: linear-gradient(90deg, #444, #666);
@@ -29,36 +29,37 @@ body.dark {
     --button-text: #fff;
     --button-hover-background: #fff;
     --button-hover-text: #121212;
-}
-
-/* App container styling */
-.app {
+  }
+  
+  /* App container styling */
+  .app {
     min-height: 100vh;
     background: var(--background-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Header styling */
-.header {
+  }
+  
+  /* Header styling */
+  .header {
     background: var(--header-background);
-    padding: 20px;
-    text-align: center;
-}
-.header-content {
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .header-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-/* Site title */
-.site-title {
+  }
+  
+  /* Site title */
+  .site-title {
     color: #fff;
-    font-size: 1.5rem;
-}
-
-/* Header back and toggle buttons */
-.header-back-button,
-.toggle-button {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  /* Header back and toggle buttons */
+  .header-back-button,
+  .toggle-button {
     background: transparent;
     border: 1px solid white;
     color: white;
@@ -66,34 +67,41 @@ body.dark {
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s ease, color 0.3s ease;
-}
-.header-back-button:hover,
-.toggle-button:hover {
+  }
+  .header-back-button:hover,
+  .toggle-button:hover {
     background: var(--button-hover-background);
     color: var(--button-hover-text);
-}
-
-/* Home container styling */
-.home {
+  }
+  
+  /* Header actions */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Home container styling */
+  .home {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
-}
-
-/* Container for the cards */
-.card-container {
+  }
+  
+  /* Container for the cards */
+  .card-container {
     display: flex;
     gap: 40px;
-}
-
-/* Remove default link styling */
-.card-link {
+  }
+  
+  /* Remove default link styling */
+  .card-link {
     text-decoration: none;
-}
-
-/* Card styling with smooth animations and gradients */
-.card {
+  }
+  
+  /* Card styling with smooth animations and gradients */
+  .card {
     width: 400px;
     height: 300px;
     background: var(--card-background);
@@ -106,30 +114,26 @@ body.dark {
     align-items: center;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
     cursor: pointer;
-}
-
-/* Hover effect for cards */
-.card:hover {
+  }
+  .card:hover {
     transform: scale(1.05);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
-}
-
-/* Card label styling */
-.card-label {
+  }
+  
+  /* Card label styling */
+  .card-label {
     color: var(--card-text-color);
     font-size: 2rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     transition: letter-spacing 0.4s ease;
-}
-
-/* Increase letter spacing on hover */
-.card:hover .card-label {
+  }
+  .card:hover .card-label {
     letter-spacing: 4px;
-}
-
-/* Overlay animation on cards */
-.card::after {
+  }
+  
+  /* Overlay animation on cards */
+  .card::after {
     content: "";
     position: absolute;
     top: -50%;
@@ -140,33 +144,33 @@ body.dark {
     transform: rotate(45deg);
     opacity: 0;
     transition: opacity 0.4s ease;
-}
-.card:hover::after {
+  }
+  .card:hover::after {
     opacity: 1;
-}
-
-/* Card content positioning */
-.card-content {
+  }
+  
+  /* Card content positioning */
+  .card-content {
     z-index: 1;
-}
-
-/* Page content styling for Import and Export pages */
-.page {
+  }
+  
+  /* Page content styling for Import and Export pages */
+  .page {
     text-align: center;
     padding: 40px;
     color: var(--text-color);
-}
-.page h1 {
+  }
+  .page h1 {
     font-size: 2rem;
     margin-bottom: 20px;
-}
-.page p {
+  }
+  .page p {
     font-size: 1rem;
     margin-bottom: 20px;
-}
-
-/* Back button styling */
-.back-button {
+  }
+  
+  /* Back button styling */
+  .back-button {
     background: transparent;
     border: 1px solid var(--button-border);
     color: var(--button-text);
@@ -174,14 +178,61 @@ body.dark {
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s ease, color 0.3s ease;
-}
-.back-button:hover {
+  }
+  .back-button:hover {
     background: var(--button-hover-background);
     color: var(--button-hover-text);
-}
-
-
-.profile-button:hover{
+  }
+  
+  /* Profile container and button styling */
+  .profile-container {
+    position: relative;
+    display: inline-block;
+  }
+  .profile-button {
+    background: none;
+    border: 1px solid white;
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .profile-button:hover {
     background: var(--button-hover-background);
     color: var(--button-hover-text);
-}
+  }
+  
+  /* Profile dropdown styling */
+  .profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 1000;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .dropdown-item {
+    display: block;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .dropdown-item:hover {
+    background: #f0f0f0;
+  }
+  
