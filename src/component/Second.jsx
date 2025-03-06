@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import "./style.css";
 
+
 const Card = ({ label, path }) => (
   <Link to={path} className="card-link">
     <div className="card">
