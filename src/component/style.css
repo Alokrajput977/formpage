@@ -179,3 +179,9 @@ body.dark {
     background: var(--button-hover-background);
     color: var(--button-hover-text);
 }
+
+
+.profile-button:hover{
+    background: var(--button-hover-background);
+    color: var(--button-hover-text);
+}
