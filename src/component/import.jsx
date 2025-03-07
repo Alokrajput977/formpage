@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Header = ({ darkMode, toggleDarkMode }) => {
@@ -18,6 +18,60 @@ const Header = ({ darkMode, toggleDarkMode }) => {
   );
 };
 
+const Card = ({ title, id, onClick }) => {
+  const blockRef = useRef(null);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const offsetRef = useRef({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    if (blockRef.current) {
+      const rect = blockRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left) - rect.width / 2;
+      const y = (e.clientY - rect.top) - rect.height / 2;
+      setMouse({ x, y });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setMouse({ x: 0, y: 0 });
+  };
+
+  useEffect(() => {
+    let animationFrame;
+    const animate = () => {
+      // Ease toward the current mouse position
+      offsetRef.current.x += (mouse.x - offsetRef.current.x) / 12;
+      offsetRef.current.y += (mouse.y - offsetRef.current.y) / 12;
+      if (blockRef.current) {
+        blockRef.current.style.transform = `scale(1.03) translate(${offsetRef.current.x * 0.05}px, ${offsetRef.current.y * 0.05}px) rotateX(${offsetRef.current.y * 0.05}deg) rotateY(${offsetRef.current.x * 0.05}deg)`;
+        const circleLight = blockRef.current.querySelector('.circleLight');
+        if (circleLight) {
+          circleLight.style.background = `radial-gradient(circle at ${mouse.x}px ${mouse.y}px, rgba(255,255,255,0.6), transparent)`;
+        }
+      }
+      animationFrame = requestAnimationFrame(animate);
+    };
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [mouse]);
+
+  return (
+    <div
+      className="card-item"
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="block" ref={blockRef}>
+        <span className="circleLight"></span>
+        <div className="text">
+          <h2>{title}</h2>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Cards = () => {
   const navigate = useNavigate();
   const cards = [
@@ -32,35 +86,13 @@ const Cards = () => {
   return (
     <div className="cards-container">
       <div className="cards-grid">
-        {cards.map((card, index) => (
-          <div
+        {cards.map((card) => (
+          <Card
             key={card.id}
-            className="e-card playing"
-            style={{ animationDelay: `${index * 0.2}s` }}
+            title={card.title}
+            id={card.id}
             onClick={() => navigate(`/dashboard/${card.id}`)}
-          >
-            <div className="image" />
-            <div className="wave" />
-            <div className="wave" />
-            <div className="wave" />
-            <div className="infotop">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="icon"
-              >
-                <path
-                  fill="currentColor"
-                  d="M19.4133 4.89862L14.5863 2.17544C12.9911 1.27485 11.0089 1.27485 9.41368 2.17544L4.58674 4.89862C2.99153 5.7992 2 7.47596 2 9.2763V14.7235C2 16.5238 2.99153 18.2014 4.58674 19.1012L9.41368 21.8252C10.2079 22.2734 11.105 22.5 12.0046 22.5C12.6952 22.5 13.3874 22.3657 14.0349 22.0954C14.2204 22.018 14.4059 21.9273 14.5872 21.8252L19.4141 19.1012C19.9765 18.7831 20.4655 18.3728 20.8651 17.8825C21.597 16.9894 22 15.8671 22 14.7243V9.27713C22 7.47678 21.0085 5.7992 19.4133 4.89862Z"
-                ></path>
-              </svg>
-              <br />
-              {card.title}
-              <br />
-              <div className="name"></div>
-            </div>
-          </div>
+          />
         ))}
       </div>
     </div>
@@ -69,10 +101,7 @@ const Cards = () => {
 
 const Import = () => {
   const [darkMode, setDarkMode] = useState(false);
-
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-  };
+  const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
   useEffect(() => {
     if (darkMode) {
@@ -86,188 +115,125 @@ const Import = () => {
     <div className="cards-page-wrapper">
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Cards />
-
       <style>{`
-        .cards-page-wrapper {
-          background-color: rgb(230, 213, 208);
-          color: #333;
-          min-height: 100vh;
-          transition: background-color 0.3s ease, color 0.3s ease;
+        /* Base resets */
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
         }
-        body.dark .cards-page-wrapper {
-          background-color: #121212;
+        body {
+          font-family: 'Open Sans', sans-serif;
+          /* Single background image for the entire body */
+          background: url('https://cdn.pixabay.com/photo/2021/12/06/10/55/hamburg-6849995_1280.jpg') no-repeat center center fixed;
+          background-size: cover;
+          color: #333;
+        }
+        body.dark {
           color: #ccc;
         }
+        .cards-page-wrapper {
+          min-height: 100vh;
+          padding: 20px;
+          background: transparent;
+        }
+        /* Transparent, blurred header */
         .app-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          padding: 1rem 2rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 1rem 2rem;
-          background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-          transition: background 0.3s ease;
+          background: rgba(255, 255, 255, 0.3);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          z-index: 1000;
         }
         body.dark .app-header {
-          background: linear-gradient(90deg, #2c3e50 0%, rgb(0, 0, 0) 50%, #2c3e50 100%);
+          background: rgba(0, 0, 0, 0.3);
         }
         .app-header h1 {
-          color: #fff;
           margin: 0;
-          font-size: 2rem;
-        }
-        .header-buttons {
-          display: flex;
-          gap: 10px;
+          color: inherit;
         }
         .header-buttons button {
           background: transparent;
-          color: #fff;
-          border: 1px solid white;
+          border: 1px solid currentColor;
+          color: inherit;
           padding: 0.5rem 1rem;
           border-radius: 8px;
           cursor: pointer;
-          transition: all 0.4s ease-in-out;
-          letter-spacing: 1px;
-          font-weight: bold;
-          position: relative;
-          overflow: hidden;
+          margin-left: 10px;
+          transition: background 0.3s, box-shadow 0.3s;
         }
         .header-buttons button:hover {
-          background: black;
-          color: #fff;
-          border: 1px solid #000;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+          background: rgba(0,0,0,0.1);
+          box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
-        .header-buttons button::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: white;
-          transition: all 0.4s ease-in-out;
-          z-index: -1;
-        }
-        .header-buttons button:hover::before {
-          left: 0;
-        }
+        /* Cards grid */
         .cards-container {
-          text-align: center;
-          padding: 2rem;
+          padding-top: 100px; /* Space for fixed header */
+          display: flex;
+          justify-content: center;
         }
         .cards-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 2rem;
-          justify-items: center;
+          grid-template-columns: repeat(3, 1fr); /* 3 boxes per row */
+          gap: 20px;
+          width: 100%;
+          max-width: 1200px;
+          margin: auto;
         }
-        .e-card {
-          margin: 0 auto;
-          background: transparent;
-          box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
+        .card-item {
+          cursor: pointer;
+          perspective: 1000px;
+        }
+        .block {
           position: relative;
-          width: 240px;
-          height: 330px;
+          width: 100%;
+          height: 300px; /* Increased card height */
           border-radius: 16px;
           overflow: hidden;
-          cursor: pointer;
-          animation: fadeIn 0.8s ease forwards;
-          opacity: 0;
+          /* Glassmorphism effect: semi-transparent background with blur */
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          transition: background 0.5s, backdrop-filter 0.5s, box-shadow 0.5s, transform 0.5s;
+          box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
         }
-        .e-card:hover {
-          transform: translateY(-10px) scale(1.05);
-          box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+        /* On hover, remove the glass effect to unhide the background image */
+        .block:hover {
+          background: transparent;
+          backdrop-filter: blur(0px);
+          box-shadow: 0 0 70px rgba(0,0,0,0.6);
         }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .image {
+        .circleLight {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
-          background: transparent;
+          opacity: 0;
+          transition: opacity 0.5s;
+          border-radius: 16px;
         }
-        .wave {
+        .block:hover .circleLight {
+          opacity: 0.4;
+        }
+        .text {
           position: absolute;
-          width: 540px;
-          height: 700px;
-          opacity: 0.6;
-          left: 0;
-          top: 0;
-          margin-left: -50%;
-          margin-top: -70%;
-          background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
-          border-radius: 40%;
-          animation: wave 55s infinite linear;
-        }
-        .wave:nth-child(2),
-        .wave:nth-child(3) {
-          top: 210px;
-        }
-        .playing .wave {
-          border-radius: 40%;
-          animation: wave 3000ms infinite linear;
-        }
-        .playing .wave:nth-child(2) {
-          animation-duration: 4000ms;
-        }
-        .wave:nth-child(2) {
-          animation-duration: 50s;
-        }
-        .playing .wave:nth-child(3) {
-          animation-duration: 5000ms;
-        }
-        .wave:nth-child(3) {
-          animation-duration: 45s;
-        }
-        @keyframes wave {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-        .icon {
-          width: 3em;
-          margin-top: -1em;
-          padding-bottom: 1em;
-        }
-        .infotop {
-          text-align: center;
-          font-size: 20px;
-          position: absolute;
-          top: 5.6em;
-          left: 0;
-          right: 0;
+          bottom: 20px;
+          left: 20px;
           color: #fff;
-          font-weight: 600;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+          z-index: 1;
         }
-        .name {
-          font-size: 14px;
-          font-weight: 100;
-          position: relative;
-          top: 1em;
-          text-transform: lowercase;
-        }
-        @media (max-width: 768px) {
-          .cards-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .e-card {
-            width: 250px;
-            height: 350px;
-          }
-          .app-header h1 {
-            font-size: 1.8rem;
-          }
+        .text h2 {
+          margin: 0;
+          font-size: 22px;
+          font-family: 'Oswald', sans-serif;
         }
       `}</style>
     </div>
