@@ -209,10 +209,11 @@ const Dashboard = () => {
   useEffect(() => {
     if (selectedBox) {
       setLoading(true);
-      fetch(`https://your-api-url.com/data/${boxId}`)
+      fetch(`http://localhost:5000/api/dashboard/${boxId}`)
         .then((response) => {
+          console.log(response)
           if (!response.ok) {
-            console.error(response);
+            console.log(response);
             throw new Error("Network response was not ok");
           }
           return response.json();
