@@ -289,6 +289,10 @@ const Dashboard = () => {
           margin: 0;
           padding: 0;
         }
+         .dashboard-container {
+          background: url('https://cdn.pixabay.com/photo/2019/05/08/11/10/port-4188383_1280.jpg') no-repeat center center fixed;
+          background-size: cover;
+        }
         .dashboard-container.light {
           background-color: #f5f5f5;
           color: #333;
