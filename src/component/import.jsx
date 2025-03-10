@@ -141,7 +141,6 @@ const Import = () => {
           padding: 20px;
           background: transparent;
         }
-        /* Transparent, blurred header */
         .app-header {
           position: fixed;
           top: 0;
@@ -177,7 +176,6 @@ const Import = () => {
           background: rgba(0,0,0,0.1);
           box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
-        /* Cards grid */
         .cards-container {
           padding-top: 100px;
           display: flex;
@@ -201,7 +199,7 @@ const Import = () => {
           height: 300px;
           border-radius: 16px;
           overflow: hidden;
-          background: rgba(0, 0, 0, 0.8); /* black type background */
+          background: rgba(255, 255, 255, 0.2);
           backdrop-filter: blur(10px);
           transition: background 0.5s, backdrop-filter 0.5s, box-shadow 0.5s, transform 0.5s;
           box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
@@ -225,14 +223,14 @@ const Import = () => {
           opacity: 0.4;
         }
         .icon-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-        }
-        .icon-container svg {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           color: #fff;
-          font-size: 64px;
+          font-size: 80px;
+          pointer-events: none;
+          z-index: 2;
         }
         .text {
           position: absolute;
@@ -240,7 +238,7 @@ const Import = () => {
           left: 20px;
           color: #fff;
           text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-          z-index: 1;
+          z-index: 3;
         }
         .text h2 {
           margin: 0;
