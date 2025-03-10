@@ -1,0 +1,7 @@
+  const cards = [
+    { id: 1, title: 'Factory Stuffing (Container sent from ICD)' },
+    { id: 2, title: 'Factory Stuffing (Directly Loaded arrived at ICD)' },
+    { id: 3, title: 'Empty Export (Either Containers arrived at ICD)' },
+    { id: 4, title: 'Warehouse Stuffing (FCL & LCL)' },
+    { id: 5, title: 'Direct Stuffing (FCL)' },
+  ];

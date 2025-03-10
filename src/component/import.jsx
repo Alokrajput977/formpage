@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaBoxOpen, FaTruck, FaShippingFast, FaClipboardList, FaCogs, FaTruckMoving } from 'react-icons/fa';
 
 const Header = ({ darkMode, toggleDarkMode }) => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
   );
 };
 
-const Card = ({ title, id, onClick }) => {
+const Card = ({ title, id, icon, onClick }) => {
   const blockRef = useRef(null);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const offsetRef = useRef({ x: 0, y: 0 });
@@ -64,6 +65,9 @@ const Card = ({ title, id, onClick }) => {
     >
       <div className="block" ref={blockRef}>
         <span className="circleLight"></span>
+        <div className="icon-container">
+          {icon}
+        </div>
         <div className="text">
           <h2>{title}</h2>
         </div>
@@ -75,12 +79,12 @@ const Card = ({ title, id, onClick }) => {
 const Cards = () => {
   const navigate = useNavigate();
   const cards = [
-    { id: 1, title: 'Factory Destuffing Cycle' },
-    { id: 2, title: 'Warehouse Destuffing Cycle (FCL)' },
-    { id: 3, title: 'Warehouse Destuffing Cycle (LCL)' },
-    { id: 4, title: 'Direct Destuffing Cycle' },
-    { id: 5, title: 'CFS Destuffing' },
-    { id: 6, title: 'Bonding Destuffing' },
+    { id: 1, title: 'Factory Destuffing Cycle', icon: <FaBoxOpen /> },
+    { id: 2, title: 'Warehouse Destuffing Cycle (FCL)', icon: <FaTruck /> },
+    { id: 3, title: 'Warehouse Destuffing Cycle (LCL)', icon: <FaShippingFast /> },
+    { id: 4, title: 'Direct Destuffing Cycle', icon: <FaClipboardList /> },
+    { id: 5, title: 'CFS Destuffing', icon: <FaCogs /> },
+    { id: 6, title: 'Bonding Destuffing', icon: <FaTruckMoving /> },
   ];
 
   return (
@@ -91,6 +95,7 @@ const Cards = () => {
             key={card.id}
             title={card.title}
             id={card.id}
+            icon={card.icon}
             onClick={() => navigate(`/dashboard/${card.id}`)}
           />
         ))}
@@ -124,7 +129,6 @@ const Import = () => {
         }
         body {
           font-family: 'Open Sans', sans-serif;
-          /* Single background image for the entire body */
           background: url('https://cdn.pixabay.com/photo/2021/12/06/10/55/hamburg-6849995_1280.jpg') no-repeat center center fixed;
           background-size: cover;
           color: #333;
@@ -175,13 +179,13 @@ const Import = () => {
         }
         /* Cards grid */
         .cards-container {
-          padding-top: 100px; /* Space for fixed header */
+          padding-top: 100px;
           display: flex;
           justify-content: center;
         }
         .cards-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr); /* 3 boxes per row */
+          grid-template-columns: repeat(3, 1fr);
           gap: 20px;
           width: 100%;
           max-width: 1200px;
@@ -194,16 +198,14 @@ const Import = () => {
         .block {
           position: relative;
           width: 100%;
-          height: 300px; /* Increased card height */
+          height: 300px;
           border-radius: 16px;
           overflow: hidden;
-          /* Glassmorphism effect: semi-transparent background with blur */
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(0, 0, 0, 0.8); /* black type background */
           backdrop-filter: blur(10px);
           transition: background 0.5s, backdrop-filter 0.5s, box-shadow 0.5s, transform 0.5s;
           box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
         }
-        /* On hover, remove the glass effect to unhide the background image */
         .block:hover {
           background: transparent;
           backdrop-filter: blur(0px);
@@ -221,6 +223,16 @@ const Import = () => {
         }
         .block:hover .circleLight {
           opacity: 0.4;
+        }
+        .icon-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+        }
+        .icon-container svg {
+          color: #fff;
+          font-size: 64px;
         }
         .text {
           position: absolute;

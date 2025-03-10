@@ -133,7 +133,7 @@ const boxColumns = {
 };
 
 
-const Dashboard = () => {
+const Dashboardt = () => {
     const { boxId } = useParams();
     const [apiData, setApiData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -240,7 +240,7 @@ const Dashboard = () => {
           justify-content: space-between;
           align-items: center;
           padding: 1rem 2rem;
-          background: ${darkMode ? '#222' : 'linear-gradient(90deg, #7b2ff7, #f107a3)'};
+          background: ${darkMode ? '#222' : 'linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);'};
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .dashboard-header h1 {
@@ -303,4 +303,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Dashboardt;
