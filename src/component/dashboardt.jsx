@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 const boxColumns = {
   1: {
-    heading: "Factory Stuffing (Container sent from ICD as Empty and Return Loaded after stuffing for Rail Out)",
+    heading: "Factory Stuffing (Container sent from ICD )",
     columns: [
       "S.No",
       "Container number",
@@ -28,7 +28,7 @@ const boxColumns = {
     ],
   },
   2: {
-    heading: "Factory Stuffing (Directly Loaded arrived at ICD after Factory stuffing for Rail Out)",
+    heading: "Factory Stuffing (Directly Loaded arrived at ICD )",
     columns: [
       "S.No",
       "Container number",
