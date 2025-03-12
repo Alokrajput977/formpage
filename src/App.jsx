@@ -70,7 +70,7 @@ const App = () => {
           />
 
           <Route
-            path="//dashboard/:boxId/row/:rowId"
+            path="/dashboard/:boxId/row/:rowId"
             element={
               <ProtectedRoute>
                 <RowDetails />
