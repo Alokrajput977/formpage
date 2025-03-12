@@ -7,6 +7,16 @@ import {
 } from 'react-icons/fa';
 
 
+import "./footer.css";
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <p>© {new Date().getFullYear()} Sunic Copyright © All Rights Reserved.</p>
+    </footer>
+  );
+};
+
+
 const Header = ({ darkMode, toggleDarkMode }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -179,7 +189,9 @@ const ImportPage = () => {
           ))}
         </div>
       </div>
+      
     </div>
+    
   );
 };
 
@@ -462,6 +474,7 @@ function App() {
           </ProtectedRoute>
         } />
       </Routes>
+      <Footer />
     </div>
   );
 }

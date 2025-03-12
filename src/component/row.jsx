@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 
 const RowDetails = () => {
   const { boxId, rowId } = useParams();
@@ -7,9 +8,40 @@ const RowDetails = () => {
   const navigate = useNavigate();
   const rowData = location.state; 
   const [darkMode, setDarkMode] = useState(false);
-  console.log(rowId)
+  console.log(rowId);
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
+
+  const handleDownload = () => {
+    const cardElement = document.querySelector('.details-card');
+    if (cardElement) {
+      // Create a temporary container with two copies of the card
+      const container = document.createElement('div');
+      container.style.display = 'flex';
+      container.style.flexDirection = 'row';
+      container.style.gap = '20px';
+      
+      // Clone the details card twice
+      const clone1 = cardElement.cloneNode(true);
+      const clone2 = cardElement.cloneNode(true);
+      
+      container.appendChild(clone1);
+      container.appendChild(clone2);
+      
+      // Position container off-screen so it doesn't affect layout
+      container.style.position = 'absolute';
+      container.style.top = '-10000px';
+      document.body.appendChild(container);
+      
+      html2canvas(container).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `row-details-${boxId}-${rowId}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        document.body.removeChild(container);
+      });
+    }
+  };
 
   if (!rowData) {
     return (
@@ -29,6 +61,7 @@ const RowDetails = () => {
           <button onClick={toggleDarkMode}>
             {darkMode ? 'Light Mode' : 'Dark Mode'}
           </button>
+          <button onClick={handleDownload}>Download</button>
         </div>
       </header>
       <div className="details-container">

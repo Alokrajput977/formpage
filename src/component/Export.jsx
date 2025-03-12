@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaShippingFast, FaTruck, FaBoxes, FaWarehouse, FaBoxOpen } from 'react-icons/fa';
+import "./footer.css"
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <p>© {new Date().getFullYear()} Sunic Copyright © All Rights Reserved.</p>
+    </footer>
+  );
+};
 
 const Header = ({ darkMode, toggleDarkMode }) => {
   const navigate = useNavigate();
@@ -246,6 +254,7 @@ const Export = () => {
           font-family: 'Oswald', sans-serif;
         }
       `}</style>
+      <Footer/>
     </div>
   );
 };

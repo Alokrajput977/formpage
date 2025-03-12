@@ -3,7 +3,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./AuthForm.css";  
+import "./AuthForm.css"; 
+
+
+import "./footer.css"
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <p>© {new Date().getFullYear()} Sunic Copyright © All Rights Reserved.</p>
+    </footer>
+  );
+};
 
 const AuthForm = () => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
@@ -150,6 +160,7 @@ const AuthForm = () => {
         </div>
       </div>
       <ToastContainer />
+              <Footer />
     </div>
   );
 };

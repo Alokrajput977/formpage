@@ -8,14 +8,7 @@ import Export from './component/Export';
 import Dashboard from './component/dashboard';
 import Table from './component/dashboardt';
 import RowDetails from './component/row';
-import "./footer.css";
-const Footer = () => {
-  return (
-    <footer className="footer">
-      <p>© {new Date().getFullYear()} Sunic Copyright © All Rights Reserved.</p>
-    </footer>
-  );
-};
+
 
 const App = () => {
   return (
@@ -80,7 +73,7 @@ const App = () => {
 
 
         </Routes>
-        <Footer />
+
       </div>
     </Router>
   );
