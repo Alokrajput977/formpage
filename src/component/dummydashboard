@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const boxColumns = {
   1: {
@@ -200,8 +200,7 @@ const boxColumns = {
 
 const Dashboard = () => {
   const { boxId } = useParams();
-  const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -209,30 +208,29 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (selectedBox) {
-      if (boxId === "1") {
-        // For box 1, generate dummy data with all 25 columns
-        setTimeout(() => {
-          const dummyRow = {};
-          selectedBox.columns.forEach(col => {
-            dummyRow[col] = `Dummy ${col}`;
-          });
-          // For demonstration, create 5 dummy rows (each identical)
-          const rows = Array.from({ length: 6 }, () => ({ ...dummyRow }));
-          setData(rows);
+      setLoading(true);
+      fetch(`http://localhost:5000/api/dashboard/${boxId}`)
+        .then((response) => {
+          console.log(response)
+          if (!response.ok) {
+            console.log(response);
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setApiData(data);
           setLoading(false);
-        }, 1000);
-      } else {
-        // For boxes 2 to 6, render table with headings but blank rows
-        setTimeout(() => {
-          setData([]);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
           setLoading(false);
-        }, 1000);
-      }
+        });
     }
   }, [boxId, selectedBox]);
 
   const toggleDarkMode = () => {
-    setDarkMode(prev => !prev);
+    setDarkMode((prevMode) => !prevMode);
   };
 
   if (!selectedBox) {
@@ -261,18 +259,14 @@ const Dashboard = () => {
             {loading ? (
               <tr>
                 <td colSpan={selectedBox.columns.length} style={{ textAlign: 'center' }}>
-                  Loading dummy data...
+                  Loading API data...
                 </td>
               </tr>
-            ) : data && data.length > 0 ? (
-              data.map((row, rowIndex) => (
-                <tr 
-                  key={rowIndex} 
-                  onClick={() => navigate(`/dashboard/${boxId}/row/${rowIndex}`, { state: row })}
-                  style={{ cursor: 'pointer' }}
-                >
+            ) : apiData && apiData.length > 0 ? (
+              apiData.map((row, rowIndex) => (
+                <tr key={rowIndex}>
                   {selectedBox.columns.map((col, colIndex) => (
-                    <td key={colIndex}>{row[col]}</td>
+                    <td key={colIndex}>{row[col] || ""}</td>
                   ))}
                 </tr>
               ))
@@ -295,7 +289,7 @@ const Dashboard = () => {
           margin: 0;
           padding: 0;
         }
-        .dashboard-container {
+         .dashboard-container {
           background: url('https://cdn.pixabay.com/photo/2019/05/08/11/10/port-4188383_1280.jpg') no-repeat center center fixed;
           background-size: cover;
         }
@@ -312,7 +306,7 @@ const Dashboard = () => {
           justify-content: space-between;
           align-items: center;
           padding: 1rem 2rem;
-          background: ${darkMode ? '#222' : 'linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)'};
+          background: ${darkMode ? '#222' : 'linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);'};
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .dashboard-header h1 {

@@ -7,6 +7,7 @@ import Import from "./component/import"
 import Export from './component/Export';
 import Dashboard from './component/dashboard';
 import Table from './component/dashboardt';
+import RowDetails from './component/row';
 import "./footer.css";
 const Footer = () => {
   return (
@@ -49,7 +50,7 @@ const App = () => {
             }
           />
 
-          
+
           <Route
             path="/dashboard/:boxId"
             element={
@@ -59,7 +60,7 @@ const App = () => {
             }
           />
 
-              <Route
+          <Route
             path="/table/:boxId"
             element={
               <ProtectedRoute>
@@ -68,7 +69,16 @@ const App = () => {
             }
           />
 
-          
+          <Route
+            path="//dashboard/:boxId/row/:rowId"
+            element={
+              <ProtectedRoute>
+                <RowDetails />
+              </ProtectedRoute>
+            }
+          />
+
+
         </Routes>
         <Footer />
       </div>
