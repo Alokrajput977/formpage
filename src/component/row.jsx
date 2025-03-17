@@ -1,44 +1,33 @@
 import React, { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 const RowDetails = () => {
   const { boxId, rowId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const rowData = location.state; 
+  const rowData = location.state;
   const [darkMode, setDarkMode] = useState(false);
-  console.log(rowId);
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
   const handleDownload = () => {
     const cardElement = document.querySelector('.details-card');
     if (cardElement) {
-      // Create a temporary container with two copies of the card
-      const container = document.createElement('div');
-      container.style.display = 'flex';
-      container.style.flexDirection = 'row';
-      container.style.gap = '20px';
-      
-      // Clone the details card twice
-      const clone1 = cardElement.cloneNode(true);
-      const clone2 = cardElement.cloneNode(true);
-      
-      container.appendChild(clone1);
-      container.appendChild(clone2);
-      
-      // Position container off-screen so it doesn't affect layout
-      container.style.position = 'absolute';
-      container.style.top = '-10000px';
-      document.body.appendChild(container);
-      
-      html2canvas(container).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `row-details-${boxId}-${rowId}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        document.body.removeChild(container);
+      html2canvas(cardElement).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgProps = pdf.getImageProperties(imgData);
+        // Calculate image height to maintain aspect ratio
+        const imgWidth = pdfWidth;
+        const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        // Center the image vertically if it doesn't fill the page
+        const yPos = (pdfHeight - imgHeight) / 2;
+        pdf.addImage(imgData, 'PNG', 0, yPos, imgWidth, imgHeight);
+        pdf.save(`row-details-${boxId}-${rowId}.pdf`);
       });
     }
   };
@@ -61,7 +50,7 @@ const RowDetails = () => {
           <button onClick={toggleDarkMode}>
             {darkMode ? 'Light Mode' : 'Dark Mode'}
           </button>
-          <button onClick={handleDownload}>Download</button>
+          <button onClick={handleDownload}>Download PDF</button>
         </div>
       </header>
       <div className="details-container">
