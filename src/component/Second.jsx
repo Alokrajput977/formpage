@@ -88,7 +88,7 @@ const Home = () => (
   </div>
 );
 
-/* Export Page Component */
+
 const ExportPage = () => {
   const navigate = useNavigate();
   return (
@@ -112,7 +112,7 @@ const EditProfile = () => {
   );
 };
 
-/* Animated Card Component – used in the Import page */
+
 const Card = ({ title, id, icon, onClick }) => {
   const blockRef = useRef(null);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
