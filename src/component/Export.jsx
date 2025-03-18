@@ -63,7 +63,6 @@ const Card = ({ title, icon, onClick }) => {
     return () => cancelAnimationFrame(animationFrame);
   }, [mouse]);
 
-  // Destructure the passed icon component
   const Icon = icon;
 
   return (

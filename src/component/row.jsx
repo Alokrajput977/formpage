@@ -21,10 +21,8 @@ const RowDetails = () => {
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
         const imgProps = pdf.getImageProperties(imgData);
-        // Calculate image height to maintain aspect ratio
         const imgWidth = pdfWidth;
         const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        // Center the image vertically if it doesn't fill the page
         const yPos = (pdfHeight - imgHeight) / 2;
         pdf.addImage(imgData, 'PNG', 0, yPos, imgWidth, imgHeight);
         pdf.save(`row-details-${boxId}-${rowId}.pdf`);

@@ -38,7 +38,7 @@ const AuthForm = () => {
         password: signUpPassword,
       });
       toast.success(res.data.msg || "Registered successfully!");
-      setIsRightPanelActive(true); // Switch to the sign-in panel
+      setIsRightPanelActive(true); 
     } catch (error) {
       toast.error(error.response?.data.msg || "Registration failed");
     }
@@ -56,12 +56,12 @@ const AuthForm = () => {
       navigate("/second");
     } catch (error) {
       toast(error.response?.data.msg || "Invalid credentials", {
-        type: "default", // Use a string instead of toast.TYPE.DEFAULT
-        closeButton: false, // Remove the close (x) button
+        type: "default",
+        closeButton: false, 
         style: {
-          backgroundColor: "#fff", // Neutral background
-          color: "#000",           // Neutral text color
-          border: "1px solid #ccc" // Optional border for a subtle outline
+          backgroundColor: "#fff", 
+          color: "#000",           
+          border: "1px solid #ccc" 
         }
       });
     }

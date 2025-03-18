@@ -48,7 +48,7 @@ const Card = ({ title, id, icon, onClick }) => {
   useEffect(() => {
     let animationFrame;
     const animate = () => {
-      // Ease toward the current mouse position
+    
       offsetRef.current.x += (mouse.x - offsetRef.current.x) / 12;
       offsetRef.current.y += (mouse.y - offsetRef.current.y) / 12;
       if (blockRef.current) {

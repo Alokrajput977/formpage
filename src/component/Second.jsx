@@ -59,8 +59,6 @@ const Header = ({ darkMode, toggleDarkMode }) => {
   );
 };
 
-/* Home Component – displays two card links for Import and Export with similar box sizes, big font icons,
-   and hover effects that remove the default background to show an image */
 const Home = () => (
   <div className="home">
     <div className="card-container">
@@ -100,7 +98,6 @@ const ExportPage = () => {
   );
 };
 
-/* Edit Profile Component */
 const EditProfile = () => {
   const navigate = useNavigate();
   return (
@@ -162,7 +159,7 @@ const Card = ({ title, id, icon, onClick }) => {
   );
 };
 
-/* Import Page Component – uses the full UI design with animated cards */
+
 const ImportPage = () => {
   const navigate = useNavigate();
   const cards = [
@@ -195,7 +192,7 @@ const ImportPage = () => {
   );
 };
 
-/* Global Styles – includes resets, header/card design, and Home card modifications for hover background images */
+
 const GlobalStyles = () => (
   <style>{`
     /* Base resets */
