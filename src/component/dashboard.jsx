@@ -209,25 +209,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (selectedBox) {
-      if (boxId === "1") {
-        // For box 1, generate dummy data with all 25 columns
-        setTimeout(() => {
-          const dummyRow = {};
-          selectedBox.columns.forEach(col => {
-            dummyRow[col] = `Dummy ${col}`;
-          });
-          // For demonstration, create 5 dummy rows (each identical)
-          const rows = Array.from({ length: 6 }, () => ({ ...dummyRow }));
-          setData(rows);
-          setLoading(false);
-        }, 1000);
-      } else {
-        // For boxes 2 to 6, render table with headings but blank rows
-        setTimeout(() => {
-          setData([]);
-          setLoading(false);
-        }, 1000);
-      }
+      // Replace this comment with your data fetching logic.
+      // For example, you can fetch real data from an API endpoint.
+      // Once the data is fetched, update the state accordingly.
+      // Here, we're just setting an empty array and turning off the loading state.
+      setData([]);
+      setLoading(false);
     }
   }, [boxId, selectedBox]);
 
@@ -261,7 +248,7 @@ const Dashboard = () => {
             {loading ? (
               <tr>
                 <td colSpan={selectedBox.columns.length} style={{ textAlign: 'center' }}>
-                  Loading dummy data...
+                  Loading data...
                 </td>
               </tr>
             ) : data && data.length > 0 ? (
