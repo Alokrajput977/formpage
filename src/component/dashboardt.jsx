@@ -1,140 +1,142 @@
+// Dashboard.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
-const boxColumns = {
-  1: {
-    heading: "Factory Stuffing (Container sent from ICD )",
-    columns: [
-      "S.No",
-      "Container number",
-      "Size",
-      "Yard Location",
-      "Empty Permit No",
-      "Trailer No",
-      "Empty Container Gate Out",
-      "Loaded Permit",
-      "Loaded Gated In",
-      "Yard Location",
-      "Loading Container from Yard To ITV",
-      "CGO Date & Time",
-      "Seal No",
-      "Container Status",
-      "Loading on wagon Dt & time",
-      "Equipment used",
-      "Wagon No",
-      "Rake No",
-      "Train No",
-      "Train Dep Dt & Time",
-    ],
-  },
-  2: {
-    heading: "Factory Stuffing (Directly Loaded arrived at ICD )",
-    columns: [
-      "S.No",
-      "Container number",
-      "Size",
-      "Loaded Permit No",
-      "Loaded Gated In",
-      "Trailer No",
-      "Yard Location",
-      "Loading Container from Yard To ITV",
-      "CGO Date & Time",
-      "Seal No",
-      "Container Status",
-      "Loading on wagon Dt & time",
-      "Equipment used",
-      "Wagon No",
-      "Rake No",
-      "Train No",
-      "Train Dep Dt & Time",
-    ],
-  },
-  3: {
-    heading: "Empty Export (Either Containers arrived at ICD by Road or Rail)",
-    columns: [
-      "S.No",
-      "Container number",
-      "Size",
-      "Empty Permit No",
-      "Empty Gated In",
-      "Trailer No",
-      "Yard Location",
-      "Loading Container from Yard To ITV",
-      "CGO Date & Time",
-      "Container Status",
-      "Loading on wagon Dt & time",
-      "Equipment used",
-      "Wagon No",
-      "Rake No",
-      "Train No",
-      "Train Dep Dt & Time",
-    ],
-  },
-  4: {
-    heading: "Warehouse Stuffing (FCL & LCL)",
-    columns: [
-      "S.No",
-      "Container number",
-      "Size",
-      "First Loaded Truck Permit",
-      "First Truck Gate In",
-      "First Truck No",
-      "First CRN No",
-      "First Unloading tally sheet",
-      "Wh Slot ID",
-      "Space Used",
-      "No. of packages",
-      "Yard Location",
-      "Empty Container Placement",
-      "Stuffing Tally Sheet",
-      "WH SLOT ID",
-      "SPACE FREE",
-      "Container Sealing",
-      "Offloading into Yard",
-      "CGO Date & Time",
-      "Seal No",
-      "Container Status",
-      "Loading on wagon",
-      "Equipment used",
-      "Wagon No",
-      "Rake No",
-      "Train No",
-      "Train Dep Dt & Time",
-    ],
-  },
-  5: {
-    heading: "Direct Stuffing (FCL)",
-    columns: [
-      "S.No",
-      "Container number",
-      "Size",
-      "First Loaded Truck Permit",
-      "First Truck Gate In",
-      "First Truck No",
-      "First CRN No",
-      "Yard Location",
-      "Empty Container Placement",
-      "Stuffing Tally Sheet",
-      "Container Sealing",
-      "Offloading into Yard",
-      "CGO Date & Time",
-      "Seal No",
-      "Container Status",
-      "Loading on wagon",
-      "Equipment used",
-      "Wagon No",
-      "Rake No",
-      "Train No",
-      "Train Dep Dt & Time",
-    ],
-  },
-};
 
 const Dashboard = () => {
   const { boxId } = useParams();
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+
+  // Define column headers for each box id
+  const boxColumns = {
+    1: {
+      heading: "Factory Stuffing (Container sent from ICD)",
+      columns: [
+        "S.No",
+        "Container number",
+        "Size",
+        "Yard Location",
+        "Empty Permit No",
+        "Trailer No",
+        "Empty Container Gate Out",
+        "Loaded Permit",
+        "Loaded Gated In",
+        "Yard Location",
+        "Loading Container from Yard To ITV",
+        "CGO Date & Time",
+        "Seal No",
+        "Container Status",
+        "Loading on wagon Dt & time",
+        "Equipment used",
+        "Wagon No",
+        "Rake No",
+        "Train No",
+        "Train Dep Dt & Time",
+      ],
+    },
+    2: {
+      heading: "Factory Stuffing (Directly Loaded arrived at ICD)",
+      columns: [
+        "S.No",
+        "Container number",
+        "Size",
+        "Loaded Permit No",
+        "Loaded Gated In",
+        "Trailer No",
+        "Yard Location",
+        "Loading Container from Yard To ITV",
+        "CGO Date & Time",
+        "Seal No",
+        "Container Status",
+        "Loading on wagon Dt & time",
+        "Equipment used",
+        "Wagon No",
+        "Rake No",
+        "Train No",
+        "Train Dep Dt & Time",
+      ],
+    },
+    3: {
+      heading: "Empty Export (Either Containers arrived at ICD)",
+      columns: [
+        "S.No",
+        "Container number",
+        "Size",
+        "Empty Permit No",
+        "Empty Gated In",
+        "Trailer No",
+        "Yard Location",
+        "Loading Container from Yard To ITV",
+        "CGO Date & Time",
+        "Container Status",
+        "Loading on wagon Dt & time",
+        "Equipment used",
+        "Wagon No",
+        "Rake No",
+        "Train No",
+        "Train Dep Dt & Time",
+      ],
+    },
+    4: {
+      heading: "Warehouse Stuffing (FCL & LCL)",
+      columns: [
+        "S.No",
+        "Container number",
+        "Size",
+        "First Loaded Truck Permit",
+        "First Truck Gate In",
+        "First Truck No",
+        "First CRN No",
+        "First Unloading tally sheet",
+        "Wh Slot ID",
+        "Space Used",
+        "No. of packages",
+        "Yard Location",
+        "Empty Container Placement",
+        "Stuffing Tally Sheet",
+        "WH SLOT ID",
+        "SPACE FREE",
+        "Container Sealing",
+        "Offloading into Yard",
+        "CGO Date & Time",
+        "Seal No",
+        "Container Status",
+        "Loading on wagon",
+        "Equipment used",
+        "Wagon No",
+        "Rake No",
+        "Train No",
+        "Train Dep Dt & Time",
+      ],
+    },
+    5: {
+      heading: "Direct Stuffing (FCL)",
+      columns: [
+        "S.No",
+        "Container number",
+        "Size",
+        "First Loaded Truck Permit",
+        "First Truck Gate In",
+        "First Truck No",
+        "First CRN No",
+        "Yard Location",
+        "Empty Container Placement",
+        "Stuffing Tally Sheet",
+        "Container Sealing",
+        "Offloading into Yard",
+        "CGO Date & Time",
+        "Seal No",
+        "Container Status",
+        "Loading on wagon",
+        "Equipment used",
+        "Wagon No",
+        "Rake No",
+        "Train No",
+        "Train Dep Dt & Time",
+      ],
+    },
+  };
 
   const selectedBox = boxColumns[boxId];
 
@@ -196,7 +198,7 @@ const Dashboard = () => {
               apiData.map((row, rowIndex) => (
                 <tr key={rowIndex}>
                   {selectedBox.columns.map((col, colIndex) => (
-                    <td key={colIndex}>{row[col] || ""}</td>
+                    <td key={colIndex}>{row[colIndex] || ""}</td>
                   ))}
                 </tr>
               ))
@@ -211,9 +213,7 @@ const Dashboard = () => {
         </table>
       </div>
 
-      {/* Inline styles that depend on darkMode for dynamic styling */}
       <style>{`
-        /* Dashboard Container with Background Image */
         .dashboard-container {
           min-height: 100vh;
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -223,7 +223,6 @@ const Dashboard = () => {
           padding: 0;
           margin: 0;
         }
-        /* Overlay for readability */
         .dashboard-container.light {
           background-color: rgba(245,245,245,0.85);
           color: #333;
@@ -232,7 +231,6 @@ const Dashboard = () => {
           background-color: rgba(30,30,30,0.85);
           color: #f5f5f5;
         }
-        /* Header Styling */
         .dashboard-header {
           display: flex;
           justify-content: space-between;
@@ -265,12 +263,10 @@ const Dashboard = () => {
           background: #fff;
           color: ${darkMode ? '#222' : '#333'};
         }
-        /* Table Wrapper */
         .table-wrapper {
           padding: 2rem 3rem;
           overflow-x: auto;
         }
-        /* Attractive Table Styling */
         .api-table {
           width: 100%;
           border-collapse: collapse;

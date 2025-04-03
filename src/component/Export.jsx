@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaShippingFast, FaTruck, FaBoxes, FaWarehouse, FaBoxOpen } from 'react-icons/fa';
-import "./footer.css"
+import "./footer.css";
+
 const Footer = () => {
   return (
     <footer className="footer">
@@ -103,7 +104,7 @@ const Cards = () => {
             key={card.id}
             title={card.title}
             icon={card.icon}
-            onClick={() => navigate(`/Table/${card.id}`)}
+            onClick={() => navigate(`/dashboard/${card.id}`)}
           />
         ))}
       </div>
