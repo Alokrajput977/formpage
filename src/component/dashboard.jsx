@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 
 const boxColumns = {
   1: {
@@ -204,19 +205,88 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [filterType, setFilterType] = useState("all"); // "all", "day", "week", "month"
 
   const selectedBox = boxColumns[boxId];
 
   useEffect(() => {
     if (selectedBox) {
-      // Replace this comment with your data fetching logic.
-      // For example, you can fetch real data from an API endpoint.
-      // Once the data is fetched, update the state accordingly.
-      // Here, we're just setting an empty array and turning off the loading state.
-      setData([]);
+      // Sample data with a new "date" property added.
+      const today = new Date();
+      const getISODate = (offsetDays) => {
+        const d = new Date(today);
+        d.setDate(d.getDate() - offsetDays);
+        return d.toISOString();
+      };
+
+      setData([
+        {
+          "S.No": 1,
+          "Container number": "C123456",
+          "Size": "40ft",
+          "Ctr Status": "Full",
+          // ... other fields as needed,
+          // For demonstration, this row is from yesterday.
+          date: getISODate(1),
+        },
+        {
+          "S.No": 2,
+          "Container number": "C654321",
+          "Size": "20ft",
+          "Ctr Status": "Empty",
+          // This row is from 3 days ago.
+          date: getISODate(3),
+        },
+        {
+          "S.No": 3,
+          "Container number": "C789012",
+          "Size": "40ft",
+          "Ctr Status": "Full",
+          // This row is from 10 days ago.
+          date: getISODate(10),
+        },
+      ]);
       setLoading(false);
     }
   }, [boxId, selectedBox]);
+
+  // Filter the data based on the selected filter type.
+  const getFilteredData = () => {
+    if (filterType === "all") return data;
+
+    const now = new Date();
+    return data.filter((row) => {
+      if (!row.date) return false;
+      const rowDate = new Date(row.date);
+      const diffTime = now.getTime() - rowDate.getTime();
+      const diffDays = diffTime / (1000 * 3600 * 24);
+
+      if (filterType === "day") {
+        // Only rows from exactly yesterday.
+        return Math.floor(diffDays) === 1;
+      } else if (filterType === "week") {
+        // Rows from the last 7 days (including today).
+        return diffDays >= 0 && diffDays < 7;
+      } else if (filterType === "month") {
+        // Rows from the last 30 days.
+        return diffDays >= 0 && diffDays < 30;
+      }
+      return true;
+    });
+  };
+
+  const exportToExcel = () => {
+    const filteredData = getFilteredData();
+    // Create a worksheet from the filtered data
+    const ws = XLSX.utils.json_to_sheet(filteredData);
+    // Create a new workbook and append the worksheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    // Generate a file name based on the selected box heading
+    const fileName = `${selectedBox.heading}.xlsx`;
+    // Trigger the file download
+    XLSX.writeFile(wb, fileName);
+  };
 
   const toggleDarkMode = () => {
     setDarkMode(prev => !prev);
@@ -226,14 +296,49 @@ const Dashboard = () => {
     return <div>No data for this box. Please select a valid box.</div>;
   }
 
+  const filteredData = getFilteredData();
+
   return (
     <div className={`dashboard-container ${darkMode ? 'dark' : 'light'}`}>
       <header className="dashboard-header">
         <h1>{selectedBox.heading}</h1>
-        <button onClick={toggleDarkMode} className="toggle-btn">
-          {darkMode ? 'Light Mode' : 'Dark Mode'}
-        </button>
+        <div className="header-btns">
+          <button onClick={toggleDarkMode} className="toggle-btn">
+            {darkMode ? 'Light Mode' : 'Dark Mode'}
+          </button>
+          <button onClick={exportToExcel} className="export-btn">
+            Download Excel
+          </button>
+        </div>
       </header>
+
+      {/* Filter buttons placed above the table on the left side */}
+      <div className="filter-btns">
+        <button
+          className={`filter-btn ${filterType === "day" ? "active" : ""}`}
+          onClick={() => setFilterType("day")}
+        >
+          1 Day
+        </button>
+        <button
+          className={`filter-btn ${filterType === "week" ? "active" : ""}`}
+          onClick={() => setFilterType("week")}
+        >
+          1 Week
+        </button>
+        <button
+          className={`filter-btn ${filterType === "month" ? "active" : ""}`}
+          onClick={() => setFilterType("month")}
+        >
+          1 Month
+        </button>
+        <button
+          className={`filter-btn ${filterType === "all" ? "active" : ""}`}
+          onClick={() => setFilterType("all")}
+        >
+          Show All
+        </button>
+      </div>
 
       <div className="table-wrapper">
         <table className="api-table">
@@ -251,8 +356,8 @@ const Dashboard = () => {
                   Loading data...
                 </td>
               </tr>
-            ) : data && data.length > 0 ? (
-              data.map((row, rowIndex) => (
+            ) : filteredData && filteredData.length > 0 ? (
+              filteredData.map((row, rowIndex) => (
                 <tr 
                   key={rowIndex} 
                   onClick={() => navigate(`/dashboard/${boxId}/row/${rowIndex}`, { state: row })}
@@ -281,8 +386,6 @@ const Dashboard = () => {
           transition: background-color 0.3s, color 0.3s;
           margin: 0;
           padding: 0;
-        }
-        .dashboard-container {
           background: url('https://cdn.pixabay.com/photo/2019/05/08/11/10/port-4188383_1280.jpg') no-repeat center center fixed;
           background-size: cover;
         }
@@ -308,7 +411,12 @@ const Dashboard = () => {
           text-align: center;
           flex: 1;
         }
-        .toggle-btn {
+        .header-btns {
+          display: flex;
+          gap: 10px;
+        }
+        .toggle-btn,
+        .export-btn {
           background: transparent;
           border: 2px solid ${darkMode ? '#f5f5f5' : '#fff'};
           color: ${darkMode ? '#f5f5f5' : '#fff'};
@@ -318,9 +426,31 @@ const Dashboard = () => {
           font-weight: bold;
           transition: background 0.3s, color 0.3s;
         }
-        .toggle-btn:hover {
+        .toggle-btn:hover,
+        .export-btn:hover {
           background: ${darkMode ? '#f5f5f5' : '#fff'};
           color: ${darkMode ? '#222' : '#333'};
+        }
+        .filter-btns {
+          display: flex;
+          gap: 10px;
+          padding: 1rem 2rem;
+          align-items: center;
+        }
+        .filter-btn {
+          background: transparent;
+          border: 2px solid ${darkMode ? '#f5f5f5' : '#333'};
+          color: ${darkMode ? '#f5f5f5' : '#333'};
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background 0.3s, color 0.3s;
+        }
+        .filter-btn.active,
+        .filter-btn:hover {
+          background: ${darkMode ? '#f5f5f5' : '#333'};
+          color: ${darkMode ? '#222' : '#fff'};
         }
         .table-wrapper {
           padding: 2rem 3rem;

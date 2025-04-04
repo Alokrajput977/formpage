@@ -104,7 +104,7 @@ const Cards = () => {
             key={card.id}
             title={card.title}
             icon={card.icon}
-            onClick={() => navigate(`/dashboard/${card.id}`)}
+            onClick={() => navigate(`/Table/${card.id}`)}
           />
         ))}
       </div>
