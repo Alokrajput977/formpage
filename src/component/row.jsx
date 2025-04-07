@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import * as XLSX from 'xlsx';
 
 const RowDetails = () => {
   const { boxId, rowId } = useParams();
@@ -12,6 +13,7 @@ const RowDetails = () => {
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
+  // Existing PDF download logic
   const handleDownload = () => {
     const cardElement = document.querySelector('.details-card');
     if (cardElement) {
@@ -28,6 +30,26 @@ const RowDetails = () => {
         pdf.save(`row-details-${boxId}-${rowId}.pdf`);
       });
     }
+  };
+
+  // New Excel download logic using SheetJS (xlsx)
+  const handleDownloadExcelSheet = () => {
+    // Prepare data in a two-column format: Field and Value
+    const sheetData = Object.entries(rowData).map(([key, value]) => ({
+      Field: key,
+      Value: value
+    }));
+
+    // Create a new worksheet from the JSON data
+    const worksheet = XLSX.utils.json_to_sheet(sheetData, {
+      header: ["Field", "Value"]
+    });
+    // Create a new workbook and append the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Details");
+
+    // Write the workbook to a file and trigger the download
+    XLSX.writeFile(workbook, `excal-sheet-${boxId}-${rowId}.xlsx`);
   };
 
   if (!rowData) {
@@ -49,6 +71,7 @@ const RowDetails = () => {
             {darkMode ? 'Light Mode' : 'Dark Mode'}
           </button>
           <button onClick={handleDownload}>Download PDF</button>
+          <button onClick={handleDownloadExcelSheet}>Download Excal Sheet</button>
         </div>
       </header>
       <div className="details-container">
@@ -70,7 +93,7 @@ const RowDetails = () => {
         .row-details-page {
           min-height: 100vh;
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background: url('https://cdn.pixabay.com/photo/2019/05/08/11/10/port-4188383_1280.jpg') no-repeat center center fixed;
+          background: url('https://cdn.pixabay.com/photo/2016/11/21/13/20/port-1845350_1280.jpg') no-repeat center center fixed;
           background-size: cover;
           transition: background-color 0.3s, color 0.3s;
         }
